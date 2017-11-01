@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="../script/md.css" />
+    <script src="../script/vue.js"></script>
+    <script src="../script/markdown-it.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <ol>
+            <todo-item 
+            v-for="todo in todos"
+            v-bind:todo="todo"
+            v-bind:key="todo.id"
+            />
+        </ol>
+        <button v-on:click="reverse">反转</button>
+    </div>
+    <script type="markdown">
+### Vue组件
+
+> `Vue.component(tagName, object)`来定义一个组件；  
+> {  
+>     props: 声明组件需要哪些参数，字符串数组  
+>     template：组件的模板  
+> }  
+
+### 生命周期函数
+
+> beforeCreate -> created -> beforeMount -> mounted -> beforeUpdate -> updated -> beforeDestroy -> destroyed
+    </script>
+    <script src="../script/common.js"></script>
+    <script>
+        const _FILENAME_ = './test2.html';
+        Vue.component("todo-item", {
+            props: ["todo"],
+            template: "<li>{{todo.info}}</li>"
+        });
+        let v = new Vue({
+            el: "#app",
+            data: {
+                todos: [
+                    {id: 0, info: "苹果5"},
+                    {id: 1, info: "苹果4"},
+                    {id: 2, info: "苹果3"},
+                    {id: 3, info: "苹果2"},
+                    {id: 4, info: "苹果1"},                    
+                ]
+            }, 
+            methods: {
+                reverse: function() {
+                    this.todos = this.todos.reverse();
+                }
+            },
+            beforeCreate: function() {
+                console.log("lifecycel beforeCreate is called.");
+            },
+            created: function() {
+                console.log("lifecycel created is called.");
+            },
+            beforeMount: function() {
+                console.log("lifecycel beforeMount is called.");
+            },
+            mounted: function() {
+                console.log("lifecycel mounted is called.");
+            },
+            beforeUpdate: function() {
+                console.log("lifecycel beforeUpdate is called.");
+            },
+            updated: function() {
+                console.log("lifecycel updated is called.");
+            },
+            beforeDestroy: function() {
+                console.log("lifecycel beforeDestroy is called.");
+            },
+            destroyed: function() {
+                console.log("lifecycel destroyed is called.");
+            }
+        });
+    </script>
+</body>
+</html>

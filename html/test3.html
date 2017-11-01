@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="../script/md.css" />
+    <script src="../script/vue.js"></script>
+    <script src="../script/markdown-it.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <button v-bind:disabled="btnEnable">disabled.</button>
+        <p v-html="rawHtml"></p>
+        <input v-model="vvv" />{{revvv}}
+    </div>
+    <script type="markdown">
+### 模板语法
+
+使用`{{ key }}`来进行数据绑定；内部支持javascript表达式，如 `{{ show ? 'show' : 'hide'}}`。  
+
+`v-once`指令声明只执行一次性插值，当数据改变时，view上的内容不会发生变化，同时该指令会影响指令所在元素上所有的数据绑定。
+
+`v-html`指令输出真正的html  
+
+`v-bind`指令将一个值与标签的属性进行绑定
+
+`v-if`指令根据值来判断插入还是移除元素
+
+`v-on`指令绑定一个事件
+
+`v-on:click.prevent`中`.prevent`为修饰符表示执行完事件后，调用`event.preventDefault()`
+
+`:`为`v-bind`的缩写，`:href="url"`即为`v-bind:href="url"`
+
+`@`为`v-on`的缩写，`@click="submit"`即为`v-on:click="submit"`
+
+### 计算属性 & 观察者
+
+计算属性定义在computed节点下，每个属性可以是一个纯函数或者一个对象（包含getter,setter函数）
+
+watch可以对某个属性进行监听，一旦该属性发生变化将会触发监听函数
+
+```javascript
+var vm = new Vue({
+    el: "#test",
+    data: {
+        a: 123,
+        b: 666
+    },
+    computed: {
+        va: function() {
+            return parseInt(this.a.toString().split("").reverse().join("")) || this.a;
+        },
+        vb: {
+            get: function() {
+                return this.b;
+            },
+            set: function(v) {
+                this.b = v;
+            }
+        }
+    },
+    watch: {
+        b: function(v) {
+            console.log(`b要变身为${b}`);
+        }
+    }
+});
+```
+
+    </script>
+    <script src="../script/common.js"></script>
+    <script>
+        const _FILENAME_ = "test3.html";
+        let vm = new Vue({
+            el: "#app",
+            data: {
+                btnEnable: true,
+                rawHtml: "<p>阅读全文</p><p>此处省略一万五千字...</p>",
+                vvv: ""
+            },
+            computed: {
+                revvv: function() {
+                    return this.vvv + '...';
+                }
+            },
+            watch: {
+                vvv: function(v) {
+                    console.log(`${this.vvv} to ${v}.`);
+                }
+            }
+        });
+    </script>    
+</body>
+</html>

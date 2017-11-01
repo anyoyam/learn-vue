@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="../script/md.css" />
+    <title>Document</title>
+    <script src="../script/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        {{message}}
+        <div v-bind:title="title">鼠标悬停</div>
+        <div v-if="seen">你应该可以看到我</div>
+        <ol>
+            <li v-for="todo in todos">{{todo.info}}</li>
+        </ol>
+        <button v-on:click="ckButton">click me!{{clickCount}}</button>
+        <div>
+            <h6>双向绑定：{{inputValue}}</h6>
+            <input v-model="inputValue" />
+        </div>
+    </div>
+<script type="markdown">
+> 指令带有前缀`v-`  
+
+`v-bind`属性被称为**指令**。  
+`v-bind:attr="value"` 将data的`value`绑定给标签的`attr`属性  
+例如
+```html
+// ...,
+<span v-bind:class="show">{{info}}</span>
+```
+```javascript
+let app = new Vue({
+  // ...,
+  data: {
+    info: "test",
+    show: "display"
+  }
+});
+```
+将被解析为
+```html
+<span class="display">test</span>
+```
+`v-if`条件判断，值为一个boolean类型  
+`v-for`列表循环，值为`key in value`结构的字符串，如`<li v-for="todo in todos">`  
+`v-on`用来绑定事件，事件句柄需要写在`methods`节点下，例如`v-on:click`绑定一个点击事件  
+`v-model`完成一个双向绑定，但view上的值改变时，对应的data值也会改变  
+</script>
+    <script>
+        const _FILENAME_ = 'test1.html';
+        let app = new Vue({
+            el: "#app",
+            data: {
+                message: "Yo~",
+                title: `加载时间${new Date().toLocaleTimeString()}`,
+                seen: true,
+                todos: [{ info: "哈哈" }, { info: "呵呵" }, { info: "嘿嘿" }, { info: "嗯嗯" }],
+                clickCount: "",
+                inputValue: ""
+            },
+            methods: {
+                ckButton: function (e) {
+                    if (this.clickCount === "") {
+                        this.clickCount = 1;
+                    } else {
+                        this.clickCount++;
+                    }
+                }
+            }
+        });
+    </script>
+    <script src="../script/markdown-it.min.js"></script>
+    <script src="../script/common.js"></script>
+</body>
+</html>
