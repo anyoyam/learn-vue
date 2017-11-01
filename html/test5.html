@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="../script/md.css" />
+    <script src="../script/vue.js"></script>
+    <script src="../script/markdown-it.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <input v-model="todo" @keyup.enter="add"/>
+        {{arrOutput}}
+        <ul v-if="todos.length">
+            <li is="todo-item" v-for="(t, index) in todos" :text="t.text" :key="t.id" @remove="todos.splice(index, 1)"></li>
+        </ul>
+    </div>
+    <script>
+        Vue.component('todo-item', {
+            props: ['text'],
+            template: '<li>{{text}}<button @click="$emit(\'remove\')">x</button></li>'
+        });
+        let vm = new Vue({
+            el: "#app",
+            data: {
+                todo: '',
+                todos: [],
+                id: 1,
+                arrOutput: ['苹果', '梨', '桃']
+            },
+            methods: {
+                add: function() {
+                    this.todos.push({
+                        id: this.id++,
+                        text: this.todo
+                    });
+                    this.todo = '';
+                }
+            }
+        });
+    </script>
+    <script type="markdown">
+### 事件修饰符
+
+> 配合任意事件
+
+- .stop  `event.stopPropagation()`
+- .prevent  `event.preventDefault()`
+- .capture  使用事件捕获模式
+- .self  只当时间在该元素本身（不包含子元素）触发时触发回调
+- .once 事件只会触发一次
+
+> 顺序很重要 `@click.prevent.self` 会阻止所有的点击 `@click.self.prevent` 只会阻止元素上的点击
+
+### 键值修饰符
+
+> 配合键盘事件
+
+- .enter 按下回车键
+- .tab 按下tab键
+- .delete 按下删除或退格键
+- .esc esc键
+- .space 空格键
+- .up 箭头上
+- .down 箭头下
+- .left 箭头左
+- .right 箭头右
+
+> 也可以直接指定keyCode `@keyup.13`
+
+### 系统修饰符
+
+> 配合任意事件
+
+- .ctrl ctrl键
+- .alt alt键
+- .shift shift键
+- .meta mac的⌘，windows的⊞键
+
+### `.exact` 修饰符
+
+- .exact 用来精确匹配按键
+
+`@click.ctrl.exact` 只有在点击事件的同时只按下ctrl键触发
+`@click.ctrl` 点击事件同时按下任意组合键，只要包含ctrl键就触发 例如 ctrl+shift 等
+
+### 鼠标修饰符
+
+- .left 左键
+- .right 右键
+- .middle 中间键
+
+    </script>
+    <script src="../script/common.js"></script>
+    <script>
+        const _FILENAME_ = 'test5.html';
+    </script>
+</body>
+</html>

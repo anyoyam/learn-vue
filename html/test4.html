@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="../script/md.css" />
+    <script src="../script/vue.js"></script>
+    <script src="../script/markdown-it.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div class="main" :class="{active: isActive, 'is-error': isError}">main active</div>
+        <div class="main" :class="[box, text]">main sm-box normal-text</div>
+        <div :class="classObject">active is-error</div>
+        <ul>
+            <li v-for="(item, index) in items">{{index}}. {{item.info}}</li>
+        </ul>
+    </div>
+    <script>
+        let vm = new Vue({
+            el: "#app",
+            data: {
+                isActive: true,
+                isError: false,
+                box: "sm-box",
+                text: "normal-text",
+                items: [
+                    {info: "栗子"},
+                    {info: "苹果"},
+                    {info: "桃子"},
+                    {info: "葡萄"},
+                    {info: "榴莲"},
+                    {info: "橙子"},
+                    {info: "橘子"}
+                ]
+            },
+            computed: {
+                classObject: function() {
+                    return {
+                        active: this.isActive,
+                        'is-error': !this.isError
+                    }
+                }
+            }
+        });
+        setTimeout(function() {
+            vm.items[2] = {info: "小笼包"};
+            console.log("1 ---> {info: 小笼包}", vm.items);
+            setTimeout(function() {
+                Vue.set(vm.items, 2, {info: "小笼包..."});
+                console.log("2 ---> {info: 小笼包}", vm.items);
+                setTimeout(function() {
+                    vm.items[2].info = "啊哈哈哈哈哈...";
+                    console.log("3 ---> items[2].info=啊哈哈哈哈哈...", vm.items);                   
+                }, 5e3)
+            }, 5e3);
+        }, 5e3);
+    </script>
+    <script type="markdown">
+### Class 和 Style 绑定
+#### 对象语法
+**Class**  
+
+Vue支持给`class`传一个对象，以便动态切换 `<div v-bind:class="{active: isActive}">` 当`data.isActive`为`true`时，html将渲染为`<div class="active">`  
+同时支持与普通的class共存
+
+```
+<div class="box" v-bind:class="{active: isActive, none: isHide}">
+```
+```
+data: {
+    isActive: false,
+    isHide: true
+}
+```
+```
+<div class="box none">
+```
+
+除了这种字面量形式也可以直接传入一个data中的对象  
+```
+<div :class="mainBox">
+```
+```
+data: {
+    mainBox: {
+        box: true,
+        hide: false
+    }
+}
+```
+```
+<div class="box">
+```
+这里可以使用计算属性用来更为方便的动态生成class
+```
+<div :class="mainClass">
+```
+```
+{
+    data: {
+        isError：true,
+        isHide: false
+    },
+    computed: {
+        mainClass: function() {
+            return {
+                error: this.isError,
+                hide: this.isHide
+            }
+        }
+    }
+}
+```
+```
+<div class="error">
+```
+
+**Style**  
+
+使用`v-bind:style`可以给标签添加一个内联样式，值为一个javascript对象，css属性名可以为驼峰式(camelCase)或短横线分隔(kebab-case)
+
+```
+<div :style="{backgroundColor: activeColor, 'font-size': fontSize + 'px'}">`
+```
+```
+data: {
+    activeColor: "#ff0000",
+    fontSize: 30
+}
+```
+也支持样式对象
+```
+<div :style="styleObj">
+```
+```
+data: {
+    styleObj: {
+        color: "red",
+        'background-color': "#ccc"
+    }
+}
+```
+同样的也可以使用计算属性来更好的动态生成样式
+
+#### 数组语法
+**Class**  
+
+可以把一个数组传给`v-bind:class`
+```
+<div class="main" :class="[activeClass, errorClass]">
+```
+```
+data: {
+    activeClass: "active",
+    errorClass: "is-error"
+}
+```
+```
+<div class="main active is-error">
+```
+可以使用三元运算来切换列表中的class
+```
+<div class="main" :class="[isActive ? activeClass : '', errorClass]"
+```
+只有当`isActive`为`true`时才会添加`activeClass`
+也可以使用对象语法
+```
+<div class="main" :class="[{active: isActive}, errorClass]">
+```
+**Style**  
+
+内联样式也支持同样的语法
+```
+<div :style="[borderStyle, textStyle]">
+```
+
+    </script>
+    <script src="../script/common.js"></script>
+    <script>
+        const _FILENAME_ = 'test4.html';
+    </script>
+</body>
+</html>
